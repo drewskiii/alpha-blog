@@ -1,7 +1,10 @@
 class ArticlesController < ApplicationController
+    before_action :set_article, only: [:show, :edit, :update, :destroy] # for DRY
+    #before action runs set_article method and set @article instance var for these actions
+
     def show # shows the specified article based on id
       # byebug # call here to pause execution and see what params is 
-      @article = Article.find(params[:id])  # '@' converts var to instance variable to access in the show view
+      # @article = Article.find(params[:id])  # '@' converts var to instance variable to access in the show view
                                             # params is whats passed into the url so /articles/1, 1 is the params
     end
 
@@ -15,12 +18,12 @@ class ArticlesController < ApplicationController
 
     def edit
       # byebug
-      @article = Article.find(params[:id])
+      # @article = Article.find(params[:id])
     end
 
     def create
       # render plain: params[:article] # shows the params in plaintext
-      @article = Article.new(params.require(:article).permit(:title, :description))  # permit title and description to create new article instance
+      @article = Article.new(article_params)  # permit title and description to create new article instance
       # render plain: @article.inspect
       if @article.save  # saves article in db, returns false if not saved, can access errors: article.errors.full_messages
         flash[:notice] = "Article was created successfully."  # built-in ruby helper for flashes on certain actions
@@ -31,8 +34,8 @@ class ArticlesController < ApplicationController
     end
     
     def update
-      @article = Article.find(params[:id])
-      if @article.update(params.require(:article).permit(:title, :description))
+      # @article = Article.find(params[:id])
+      if @article.update(article_params)
         flash[:notice] = "article was updated successfully"
         redirect_to @article
       else
@@ -41,9 +44,18 @@ class ArticlesController < ApplicationController
     end
 
     def destroy
-      @article = Article.find(params[:id])
+      # @article = Article.find(params[:id])
       @article.destroy
       redirect_to articles_path  # redirects to /articles with suffix: "_path"
+    end
+
+    private # access only in this class controller below
+    def set_article
+      @article = Article.find(params[:id])
+    end
+
+    def article_params
+      params.require(:article).permit(:title, :description)
     end
       
 end
