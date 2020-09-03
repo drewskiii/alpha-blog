@@ -5,7 +5,7 @@
         <tr>
             <th>Title</th>
             <th>Description</th>
-            <th>Action</th>
+            <th colspan="3">Action</th>
         </tr>
     </thead>
 
@@ -14,10 +14,16 @@
         <tr>
             <td><%= article.title %></td>
             <td><%= article.description %></td>
-            <td>Action</td>
+            <td><%= link_to 'Show', article_path(article), method: :get %></td> <!-- "(article)" gives id so => /artilces/id -->
+            <td><%= link_to 'Edit', edit_article_path(article), method: :get %></td>
+            <td><%= link_to 'Delete', article_path(article), method: :delete, data: {confirm: "Are you sure?"}%></td>  
+            <!-- article_path(article) will direct to certiain id /articles/{id}. the rest will be a method to destory action instead of GET/show-->
+            
         </tr>
         <% end %>
     </tbody>
 
 
 </table>
+
+<p><%= link_to 'Create new article', new_article_path %></p>
