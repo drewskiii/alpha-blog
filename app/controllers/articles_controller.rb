@@ -39,5 +39,11 @@ class ArticlesController < ApplicationController
         render 'edit'  # in here will display the errors in the edit.html.erb
       end
     end
+
+    def destroy
+      @article = Article.find(params[:id])
+      @article.destroy
+      redirect_to articles_path  # redirects to /articles with suffix: "_path"
+    end
       
 end
