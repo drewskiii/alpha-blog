@@ -13,6 +13,11 @@ class ArticlesController < ApplicationController
       @article = Article.new  # this allows the embedded ruby in new.html.erb to run since @article is has no errors and skips the conditional
     end
 
+    def edit
+      # byebug
+      @article = Article.find(params[:id])
+    end
+
     def create
       # render plain: params[:article] # shows the params in plaintext
       @article = Article.new(params.require(:article).permit(:title, :description))  # permit title and description to create new article instance
@@ -23,6 +28,16 @@ class ArticlesController < ApplicationController
       else # if save fails due to things like validation errors
         render 'new'  # renders the new.html.erb, then hits the error check in there and has access to this instance var @article
       end
-                                          
     end
+    
+    def update
+      @article = Article.find(params[:id])
+      if @article.update(params.require(:article).permit(:title, :description))
+        flash[:notice] = "article was updated successfully"
+        redirect_to @article
+      else
+        render 'edit'  # in here will display the errors in the edit.html.erb
+      end
+    end
+      
 end
